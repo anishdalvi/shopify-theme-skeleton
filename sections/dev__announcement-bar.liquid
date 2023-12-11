@@ -1,17 +1,30 @@
 <style>
-  .announcement__content.translate-x-full { transform: translateX(-100%); }
+
+  .announcement__content {
+    display: flex;
+    transition: transform {{ section.settings.animation_duration }}s ease-in-out;
+  }
+
+  .announcement__item {
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 8px;
+  }
+
+  
 </style>
 
 <div class="announcement" {{ block.shopify_attributes }}>
   <div class="announcement__wrapper relative overflow-hidden">
     <div
-      class="announcement__content flex transition-transform ease-in-out duration-300 transform"
+      class="announcement__content"
       role="region"
       aria-label="{{ 'sections.header.announcement' | t }}"
     >
       {% for block in section.blocks %}
         {%- if block.settings.text != blank -%}
-          <div class="announcement__item flex-shrink-0 w-full sm:w-auto px-4">
+          <div class="announcement__item">
             {%- if block.settings.link != blank -%}
               <a href="{{ block.settings.link }}" class="announcement__link">
             {%- endif -%}
@@ -30,10 +43,15 @@
 
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+   document.addEventListener('DOMContentLoaded', function () {
     const announcementContent = document.querySelector('.announcement__content');
+    const announcementItems = document.querySelectorAll('.announcement__item');
+    let currentItem = 0;
+
     setInterval(() => {
-      announcementContent.classList.toggle('translate-x-full');
+      currentItem = (currentItem + 1) % announcementItems.length;
+      const translateValue = `-${currentItem * 100}%`;
+      announcementContent.style.transform = `translateX(${translateValue})`;
     }, {{ section.settings.animation_duration | times: 1000 }});
   });
 </script>
