@@ -48,11 +48,16 @@
     const announcementItems = document.querySelectorAll('.announcement__item');
     let currentItem = 0;
 
-    setInterval(() => {
+    const slideAnnouncement = () => {
       currentItem = (currentItem + 1) % announcementItems.length;
       const translateValue = `-${currentItem * 100}%`;
       announcementContent.style.transform = `translateX(${translateValue})`;
-    }, {{ section.settings.animation_duration | times: 1000 }});
+    };
+
+    setInterval(slideAnnouncement, {{ section.settings.animation_duration | times: 1000 }});
+
+    // Trigger the first slide immediately
+    slideAnnouncement();
   });
 </script>
 
